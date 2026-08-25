@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>My Germany Map</title>
 
-    <!-- Load Map Stylesheet -->
-    <link rel="stylesheet" href="https://cloudflare.com" />
+    <!-- Leaflet CSS (required) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <style>
         body {
@@ -40,14 +40,14 @@
 
     <div id="map"></div>
 
-    <!-- Load Map JavaScript Engine -->
-    <script src="https://cloudflare.com"></script>
+    <!-- Leaflet JS (required) -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        // Create the map container and center it on Germany
+        // Create the map centered on Germany
         const map = L.map('map').setView([51.1657, 10.4515], 6);
 
-        // Render the background map graphics
+        // Background tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© OpenStreetMap contributors'
@@ -78,7 +78,7 @@
             }
         ];
 
-        // Loop through the data to add markers to the screen
+        // Add markers and bind popups (HTML allowed)
         locations.forEach(place => {
             const popupContent = `
                 <div class="map-popup">
@@ -90,11 +90,12 @@
 
             const marker = L.marker([place.lat, place.lng]).addTo(map);
 
-            marker.bindTooltip(popupContent, {
-                direction: 'top',
-                opacity: 0.9,
-                sticky: true
-            });
+            // Use a popup so the image and HTML render correctly
+            marker.bindPopup(popupContent, { maxWidth: 260 });
+
+            // Optional: open popup on hover and close on mouseout
+            marker.on('mouseover', function () { this.openPopup(); });
+            marker.on('mouseout', function () { this.closePopup(); });
         });
     </script>
 
